@@ -1,0 +1,75 @@
+@page "/"
+@page "/login"
+@layout CustomLayout
+@inject NavigationManager NavigationManager
+
+
+<div class="container">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+            <div class="my-5 d-flex justify-content-center">
+                <h4>MenuLand Hoþgeldiniz</h4>
+            </div>
+            <div class="card custom-card">
+                <div class="card-body p-5">
+                    <p class="h5 fw-semibold mb-2 text-center">Giriþ Yap</p>
+                    <div class="row gy-3">
+                        <div class="col-xl-12">
+                            <label for="signin-username" class="form-label text-default">E-Mail</label>
+                            <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="E-Mail" @bind="email">
+                        </div>
+                        <div class="col-xl-12 mb-2">
+                            <label for="signin-password" class="form-label text-default d-block">Þifre<a href="reset-password-basic" class="float-end text-danger">Þifremi Unuttum</a></label>
+                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Þifre" @bind="password">
+                            <div class="mt-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
+                                        Beni Hatýrla ?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 d-grid mt-2">
+                            <button class="btn btn-lg btn-primary" @onclick="HandleLogin">Giriþ</button>
+                        </div>
+                    </div>
+                    @if (isLoginFailed)
+                    {
+                        <div class="text-center mt-3">
+                            <p class="text-danger">Geçersiz e-posta veya þifre. Lütfen tekrar deneyin!</p>
+                        </div>
+                    }
+                    <div class="text-center">
+                        <p class="fs-12 text-muted mt-3">Yoksa hala üye olmadýn mý ? <a href="sign-up-basic" class="text-primary">Üye Ol</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Kullanýcý giriþ bilgileri
+    private string email = "";
+    private string password = "";
+
+    // Giriþ baþarýsýz mý?
+    private bool isLoginFailed = false;
+
+    // Giriþ iþlemini yöneten metod
+    private void HandleLogin()
+    {
+        // Basit bir örnek doðrulama
+        if (email == "arda" && password == "123")
+        {
+            // Baþarýlý giriþ durumunda Home sayfasýna yönlendirme
+            NavigationManager.NavigateTo("/home");
+        }
+        else
+        {
+            // Baþarýsýz giriþ
+            isLoginFailed = true;
+        }
+    }
+}
