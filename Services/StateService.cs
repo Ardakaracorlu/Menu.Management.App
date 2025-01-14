@@ -7,9 +7,9 @@ public class AppState
 {
     public string ColorTheme { get; set; } = "light";                   // light, dark
     public string Direction { get; set; } = "ltr";                      // ltr, rtl
-    public string NavigationStyles { get; set; } = "vertical";          // vertical, horizontal   
-    public string MenuStyles { get; set; } = "";                        // menu-click, menu-hover, icon-click, icon-hover
-    public string LayoutStyles { get; set; } = "default-menu";          // doublemenu, detached, icon-overlay, icontext-menu, closed-menu, default-menu 
+    public string NavigationStyles { get; set; } = "horizontal";          // vertical, horizontal   
+    public string MenuStyles { get; set; } = "menu-click";                        // menu-click, menu-hover, icon-click, icon-hover
+    public string LayoutStyles { get; set; } = "";          // doublemenu, detached, icon-overlay, icontext-menu, closed-menu, default-menu 
     public string PageStyles { get; set; } = "regular";                 // regular, classic, modern
     public string WidthStyles { get; set; } = "fullwidth";              // fullwidth, boxed
     public string MenuPosition { get; set; } = "fixed";                 // fixed, scrollable
@@ -272,7 +272,7 @@ public class StateService
         await _jsRuntime.InvokeVoidAsync("interop.addAttributeToHtml", "data-nav-layout", val);
         if (val == "horizontal")
         {
-            await _jsRuntime.InvokeVoidAsync("interop.removeAttributeFromHtml", "data-vertical-style");
+            await _jsRuntime.InvokeVoidAsync("interop.removeAttributeFromHtml", "data-horizontal-style");
 
             // string result = await _jsRuntime.InvokeAsync<string>("interop.getAttributeToHtml", "data-nav-style");
             // if (result != null)
@@ -309,8 +309,8 @@ public class StateService
         switch (val)
         {
             case "default-menu":
-                await _jsRuntime.InvokeVoidAsync("interop.addAttributeToHtml", "data-vertical-style", "overlay");
-                await _jsRuntime.InvokeVoidAsync("interop.addAttributeToHtml", "data-nav-layout", "vertical");
+                await _jsRuntime.InvokeVoidAsync("interop.addAttributeToHtml", "data-horizontal-style", "overlay");
+                await _jsRuntime.InvokeVoidAsync("interop.addAttributeToHtml", "data-nav-layout", val);
                 if (await _jsRuntime.InvokeAsync<int>("interop.inner", "innerWidth") > 992)
                 {
                     await _jsRuntime.InvokeVoidAsync("interop.removeAttributeFromHtml", "data-toggled");
@@ -448,9 +448,9 @@ public class StateService
 
         _currentState.ColorTheme = "light";                   // light, dark
         _currentState.Direction = "ltr";                      // ltr, rtl
-        _currentState.NavigationStyles = "vertical";          // vertical, horizontal   
-        _currentState.MenuStyles = "";                        // menu-click, menu-hover, icon-click, icon-hover
-        _currentState.LayoutStyles = "default-menu";          // double-menu, detached, icon-overlay, icontext-menu, closed-menu, default-menu 
+        _currentState.NavigationStyles = "horizontal";          // vertical, horizontal   
+        _currentState.MenuStyles = "menu-click";                        // menu-click, menu-hover, icon-click, icon-hover
+        _currentState.LayoutStyles = "";          // double-menu, detached, icon-overlay, icontext-menu, closed-menu, default-menu 
         _currentState.PageStyles = "regular";                 // regular, classic, modern
         _currentState.WidthStyles = "fullwidth";              // fullwidth, boxed
         _currentState.MenuPosition = "fixed";                 // fixed, scrollable

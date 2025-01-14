@@ -2,142 +2,146 @@
 @using ApexCharts
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<h3>Haydi Başlayalım</h3>
+<div class="container-fluid">
 
-
-
-<div class="d-flex flex-column justify-content-center align-items-center vh-100 px-5">
-    <!-- Üstteki Kart -->
-    <div class="col-xl-2">
-        <div class="card text-center custom-card border border-success">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="fw-semibold fs-18 text-fixed mb-2">Hedefinizin Tamamlanmasına</div>
-                        <br />
-                        <span class="d-block fs-12 text-fixed"><span class="op-7">İşlemlerin</span> <span class="fw-semibold text-success">25%</span> <span class="op-7">i tamamlandı. Hedefe bir adım daha yaklaştınız!</span>.</span>
-                    </div>
-                    <div id="crm-main">
-                        <ApexChart TItem="CrmMain" Options=CrmMainChartOptions>
-                            <ApexPointSeries TItem="CrmMain"
-                                             Items="CrmMains"
-                                             Color="#333335"
-                                             SeriesType=SeriesType.RadialBar
-                                             XValue="@(e => e.Country)"
-                                             YAggregate="@(e => decimal.Round(e.Average(e => e.DiscountPercentage)))"
-                                             OrderByDescending="e=>e.Y" />
-                        </ApexChart>
-                    </div>
-                </div>
-            </div>
+    <!-- Start::page-header -->
+    <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+        <div>
+            <p class="fw-semibold fs-18 mb-0">Haydi Başlayalım</p>
         </div>
     </div>
+    <!-- End::page-header -->
 
-    <!-- Alt Kartlar -->
-    <div class="row w-100">
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card text-center custom-card border border-success">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <span class="avatar avatar-md">
-                            <img src="../assets/images/faces/3.jpg" alt="img" class="img-fluid rounded-circle">
-                        </span>
+    <div class="row">
+        <!-- Üstteki Kart -->
+        <div class="row">
+            <div class="col-md-4"> </div>
+            <div class="col-md-4">
+                <div class="card text-center custom-card border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-fill">
+                                <p class="mb-1 fs-5 fw-semibold text-default">İŞLEMLERİN TAMAMLANMASINA</p>
+                                <div class="progress mb-3" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-secondary progress-bar-striped progress-bar-animated" style="width: 25%">%25</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h6 class="card-title fw-semibold">ŞİRKET KUR</h6>
-                    <p class="card-text">İlk adım olarak şirketinizi oluşturun ve işletmenizi resmi hale getirin.</p>
-                    <button class="btn btn-icon btn-success-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
+                </div>
+            </div>
+            <div class="col-md-4"> </div>
+        </div>
+
+        <!-- Alt Kartlar -->
+        <div class="row w-100">
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card text-center custom-card border border-secondary">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="avatar avatar-md avatar-rounded bg-secondary">
+                                <i class="ti ti-building fs-16"></i>
+                            </span>
+                        </div>
+                        <h6 class="card-title fw-semibold">ŞİRKET KUR</h6>
+                        <p class="card-text">İlk adım olarak şirketinizi oluşturun ve işletmenizi resmi hale getirin.</p>
+                        <button class="btn btn-icon btn-secondary-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
+                            <i class="ti ti-arrow-narrow-right fs-16"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card text-center custom-card border border-secondary">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="avatar avatar-md avatar-rounded bg-secondary">
+                                <i class="ri-store-2-fill"></i>
+                            </span>
+                        </div>
+                        <h6 class="card-title fw-semibold">RESTORAN KUR</h6>
+                        <p class="card-text">Restoran bilgilerinizi ekleyerek menünüzü özelleştirmeye başlayın.</p>
+                        <button class="btn btn-icon btn-secondary-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
+                            <i class="ti ti-arrow-narrow-right fs-16"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card text-center custom-card border border-secondary">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="avatar avatar-md avatar-rounded bg-secondary">
+                                <i class="ri-menu-search-fill"></i>
+                            </span>
+                        </div>
+                        <h6 class="card-title fw-semibold">MENU OLUŞTUR</h6>
+                        <p class="card-text">Lezzetli menülerinizi düzenleyin ve müşterilerinize sunmaya hazır hale getirin.</p>
+                        <button class="btn btn-icon btn-secondary-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
+                            <i class="ti ti-arrow-narrow-right fs-16"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card text-center custom-card border border-secondary">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="avatar avatar-md avatar-rounded bg-secondary">
+                                <i class="ri-qr-code-fill"></i>
+                            </span>
+                        </div>
+                        <h6 class="card-title fw-semibold">QR Oluştur</h6>
+                        <p class="card-text">Müşterilerinizin kolayca ulaşabilmesi için menünüz için QR kod oluşturun.</p>
+                        <button class="btn btn-icon btn-secondary-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
+                            <i class="ti ti-arrow-narrow-right fs-16"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card text-center custom-card border border-success">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <span class="avatar avatar-md">
-                            <img src="../assets/images/faces/3.jpg" alt="img" class="img-fluid rounded-circle">
-                        </span>
-                    </div>
-                    <h6 class="card-title fw-semibold">RESTORAN KUR</h6>
-                    <p class="card-text">Restoran bilgilerinizi ekleyerek menünüzü özelleştirmeye başlayın.</p>
-                    <button class="btn btn-icon btn-success-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                </div>
+
+        <!-- Buton -->
+
+        <div class="row">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button type="button" class="btn btn-outline-secondary rounded-pill btn-wave">HAYDİ BAŞLAYALIM</button>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card text-center custom-card border border-success">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <span class="avatar avatar-md">
-                            <img src="../assets/images/faces/3.jpg" alt="img" class="img-fluid rounded-circle">
-                        </span>
+
+
+        <div class="modal fade" id="CreateQR" tabindex="-1"
+             aria-labelledby="CreateQR" data-bs-keyboard="false"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="staticBackdropLabel2">
+                            QR Oluştur
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                     </div>
-                    <h6 class="card-title fw-semibold">MENU OLUŞTUR</h6>
-                    <p class="card-text">Lezzetli menülerinizi düzenleyin ve müşterilerinize sunmaya hazır hale getirin.</p>
-                    <button class="btn btn-icon btn-success-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card text-center custom-card border border-success">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <span class="avatar avatar-md">
-                            <img src="../assets/images/faces/3.jpg" alt="img" class="img-fluid rounded-circle">
-                        </span>
+                    <div class="modal-body">
+                        <p>
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                            Libero
+                            ipsum quasi, error quibusdam debitis maiores hic eum? Vitae
+                            nisi
+                            ipsa maiores fugiat deleniti quis reiciendis veritatis.
+                        </p>
                     </div>
-                    <h6 class="card-title fw-semibold">QR Oluştur</h6>
-                    <p class="card-text">Müşterilerinizin kolayca ulaşabilmesi için menünüz için QR kod oluşturun.</p>
-                    <button class="btn btn-icon btn-success-transparent rounded-pill btn-w-sm btn-wave" data-bs-toggle="modal" data-bs-target="#CreateQR">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            Save
+                            Changes
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Buton -->
-    <div class="mt-3">
-        <button class="btn btn-success">Haydi Başlayalım</button>
-    </div>
-</div>
-
-
-<div class="modal fade" id="CreateQR" tabindex="-1"
-     aria-labelledby="CreateQR" data-bs-keyboard="false"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="staticBackdropLabel2">
-                    QR Oluştur
-                </h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Libero
-                    ipsum quasi, error quibusdam debitis maiores hic eum? Vitae
-                    nisi
-                    ipsa maiores fugiat deleniti quis reiciendis veritatis.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                    Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                    Save
-                    Changes
-                </button>
             </div>
         </div>
     </div>
@@ -182,7 +186,7 @@
                 {
                     LineCap = ApexCharts.LineCap.Round,
                 },
-                Colors = new Color(new List<string> { "var(--success-color)" }),
+                Colors = new Color(new List<string> { "rgb(35, 183, 229)" }),
                 PlotOptions = new PlotOptions
                 {
                     RadialBar = new PlotOptionsRadialBar

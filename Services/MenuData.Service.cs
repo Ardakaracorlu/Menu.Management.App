@@ -2,8 +2,18 @@ public class MenuDataService
 {
     private List<MainMenuItems> MenuData = new List<MainMenuItems>()
     {
+
         new MainMenuItems(
             menuTitle: "MAIN"
+        ),
+        new MainMenuItems (
+            path: "/home",
+            type: "link",
+            icon: "bx bx-home",
+            title: "AnaSayfa",
+            selected: false,
+            active: false,
+            dirChange: false
         ),
         new MainMenuItems(
             type: "sub",
@@ -89,11 +99,11 @@ public class MenuDataService
                 )
             }
         ),
-        
+
     };
 
     public List<MainMenuItems> GetMenuData()
-   {
+    {
         return MenuData;
     }
 }
