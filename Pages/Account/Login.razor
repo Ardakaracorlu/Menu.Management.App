@@ -1,8 +1,9 @@
 @page "/"
 @page "/login"
+@using System.Net
+@using Menu.Management.App.Infrastructure
 @layout CustomLayout
-@inject NavigationManager NavigationManager
-
+@inject NavigationManager _NavigationManager
 
 <div class="container">
     <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
@@ -50,26 +51,32 @@
 </div>
 
 @code {
-    // Kullanýcý giriþ bilgileri
-    private string email = "";
-    private string password = "";
 
-    // Giriþ baþarýsýz mý?
-    private bool isLoginFailed = false;
+    private string password;
+    private string email;
+    private bool isLoginFailed;
 
-    // Giriþ iþlemini yöneten metod
-    private void HandleLogin()
+    private async Task HandleLogin()
     {
-        // Basit bir örnek doðrulama
-        if (email == "arda" && password == "123")
+
+        string basicAuthCredentials = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(email + ":" + password));
+        Dictionary<string, string> headers = new()
+            {
+                { "Authorization", $"Basic {basicAuthCredentials}" },
+            };
+
+        var response = await HttpClientHelper.Post(null, "https://localhost:44381/api/Account/Login", headers);
+
+        if (response.StatusCode != HttpStatusCode.OK)
         {
-            // Baþarýlý giriþ durumunda Home sayfasýna yönlendirme
-            NavigationManager.NavigateTo("/home");
+          
+            isLoginFailed = true;
         }
         else
         {
-            // Baþarýsýz giriþ
-            isLoginFailed = true;
+            _NavigationManager.NavigateTo("/home");
         }
+
+
     }
 }

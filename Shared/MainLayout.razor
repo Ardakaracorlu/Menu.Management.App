@@ -10,22 +10,24 @@
 
 <PageTitle>ynex</PageTitle>
 
+
+
 <div class="page">
-        <Switcher />
+    <Switcher />
 
-        <MainHeader />
+    <MainHeader />
 
-        <NavMenu @ref="navMenuRef" />
+    <NavMenu @ref="navMenuRef" />
 
-        <!-- Start::app-content -->
-        <div class="main-content app-content" @onclick="() => icontextCloseFn()">
-            @Body
-        </div>
+    <!-- Start::app-content -->
+    <div class="main-content app-content" @onclick="() => icontextCloseFn()">
+        @Body
+    </div>
 
-        <Footer />
+    <Footer />
 
-        <Modal />
-        
+    <Modal />
+
     @if (ShowButton)
     {
         <!-- Scroll To Top -->
@@ -47,7 +49,7 @@
         {
             await stateService.retrieveFromLocalStorage();
             await JSRuntime.InvokeVoidAsync("interop.updateScrollVisibility", DotNetObjectReference.Create(this));
-            
+
             var dataNavLayout = await JSRuntime.InvokeAsync<string>("interop.getAttributeToHtml", "data-nav-layout");
             var inner = await JSRuntime.InvokeAsync<int>("interop.inner", "innerWidth");
             if(dataNavLayout == "horizontal" && inner >= 992){
