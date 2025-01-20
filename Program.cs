@@ -1,8 +1,16 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using CurrieTechnologies.Razor.SweetAlert2;
+using Menu.Management.App.Configuration;
+using Menu.Management.App.Infrastructure;
+using FluentValidation;
+using ApexCharts;
+using Menu.Management.App.Model.Request.Account;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<ConfigManager>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<StateService>();
@@ -13,6 +21,10 @@ builder.Services.AddWMBOS();
 builder.Services.AddScoped<NavScrollService>();
 builder.Services.AddSession();
 builder.Services.AddScoped<SessionService>();
+builder.Services.AddSweetAlert2();
+builder.Services.AddScoped<HttpClientHelper>();
+var baseAddress = builder.Configuration["ApiSettings:Url"];
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
 
 // Add session services
@@ -24,8 +36,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-var baseAddress = builder.Configuration["ApiSettings:BaseUrl"];
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
+
+//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
 
 builder.Services.AddHttpContextAccessor();
@@ -40,7 +52,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.SameSite = SameSiteMode.Strict;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     });
-
 
 var app = builder.Build();
 

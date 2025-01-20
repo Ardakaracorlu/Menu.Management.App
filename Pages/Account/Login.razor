@@ -1,9 +1,17 @@
 @page "/"
 @page "/login"
 @using System.Net
-@using Menu.Management.App.Infrastructure
+@using Menu.Management.App.Model.Request.Account
+@using Menu.Management.App.Model.Response
+@using System.Text.Json;
+@using System.ComponentModel.DataAnnotations
+@using Blazored.FluentValidation
 @layout CustomLayout
 @inject NavigationManager _NavigationManager
+@inject SweetAlertService _swal
+@inject ConfigManager _configManager;
+@inject HttpClientHelper _httpClientHelper
+
 
 <div class="container">
     <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
@@ -12,71 +20,57 @@
                 <h4>MenuLand Hoþgeldiniz</h4>
             </div>
             <div class="card custom-card">
-                <div class="card-body p-5">
-                    <p class="h5 fw-semibold mb-2 text-center">Giriþ Yap</p>
-                    <div class="row gy-3">
-                        <div class="col-xl-12">
-                            <label for="signin-username" class="form-label text-default">E-Mail</label>
-                            <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="E-Mail" @bind="email">
-                        </div>
-                        <div class="col-xl-12 mb-2">
-                            <label for="signin-password" class="form-label text-default d-block">Þifre<a href="reset-password-basic" class="float-end text-danger">Þifremi Unuttum</a></label>
-                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Þifre" @bind="password">
-                            <div class="mt-2">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                    <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
-                                        Beni Hatýrla ?
-                                    </label>
+                <EditForm Model="@loginRequest" OnValidSubmit="LoginAsync">
+                    <FluentValidationValidator />
+                    <div class="card-body p-5">
+                        <p class="h5 fw-semibold mb-2 text-center">Giriþ Yap</p>
+                        <div class="row gy-3">
+                            <div class="col-xl-12">
+                                <label for="signin-username" class="form-label text-default">Kullanýcý Adý</label>
+                                <InputText id="signin-username" type="text" class="form-control form-control-lg" placeholder="Kullanýcý Adý" @bind-Value="loginRequest.UserName" />
+                                <ValidationMessage For="@(() => loginRequest.UserName)" />
+                            </div>
+                            <div class="col-xl-12 mb-2">
+                                <label for="signin-password" class="form-label text-default d-block">Þifre</label>
+                                <InputText id="password" type="password" class="form-control form-control-lg" placeholder="Þifre" @bind-Value="loginRequest.Password" />
+                                <ValidationMessage For="@(() => loginRequest.Password)" />
+                                <div class="mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                        <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
+                                            Beni Hatýrla ?
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xl-12 d-grid mt-2">
-                            <button class="btn btn-lg btn-primary" @onclick="HandleLogin">Giriþ</button>
+                            <div class="col-xl-12 d-grid mt-2">
+                                <button class="btn btn-lg btn-primary" type="submit">Giriþ</button>
+                            </div>
                         </div>
                     </div>
-                    @if (isLoginFailed)
-                    {
-                        <div class="text-center mt-3">
-                            <p class="text-danger">Geçersiz e-posta veya þifre. Lütfen tekrar deneyin!</p>
-                        </div>
-                    }
-                    <div class="text-center">
-                        <p class="fs-12 text-muted mt-3">Yoksa hala üye olmadýn mý ? <a href="sign-up-basic" class="text-primary">Üye Ol</a></p>
-                    </div>
-                </div>
+                </EditForm>
             </div>
         </div>
     </div>
 </div>
 
+<script src="_content/CurrieTechnologies.Razor.SweetAlert2/sweetAlert2.min.js"></script>
+
 @code {
 
-    private string password;
-    private string email;
-    private bool isLoginFailed;
+    private LoginRequest loginRequest = new();
+    private LoginRequestValidator validator = new LoginRequestValidator();
 
-    private async Task HandleLogin()
+    private async Task LoginAsync()
     {
-
-        string basicAuthCredentials = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(email + ":" + password));
+        string basicAuthCredentials = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(loginRequest.UserName + ":" + loginRequest.Password));
         Dictionary<string, string> headers = new()
             {
                 { "Authorization", $"Basic {basicAuthCredentials}" },
             };
 
-        var response = await HttpClientHelper.Post(null, "https://localhost:44381/api/Account/Login", headers);
-
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-          
-            isLoginFailed = true;
-        }
-        else
-        {
+        var response = await _httpClientHelper.PostAsync(null, $"{_configManager.ApiSettings.Url}Account/Login", headers);
+        if (response.IsSuccessStatusCode)
             _NavigationManager.NavigateTo("/home");
-        }
-
-
     }
 }
