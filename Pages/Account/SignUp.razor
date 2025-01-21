@@ -1,0 +1,85 @@
+﻿@page "/sign-up"
+@using Blazored.FluentValidation
+@using Menu.Management.App.Model.Request.Account
+@layout CustomLayout
+
+<div class="container-lg">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+            <div class="my-5 d-flex justify-content-center">
+                <a href="home">
+                    <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+                    <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
+                </a>
+            </div>
+            <div class="card custom-card">
+                <EditForm Model="@signUpRequest" OnValidSubmit="LoginAsync">
+                    <FluentValidationValidator />
+                    <div class="card-body p-5">
+                        <p class="h5 fw-semibold mb-2 text-center">ÜYE OL</p>
+                        <p class="mb-4 text-muted op-7 fw-normal text-center">Hoşgeldiniz &amp; Ücretsiz bir hesap oluşturarak bize katılın !</p>
+                        <div class="row gy-3">
+                            <div class="col-xl-12">
+                                <label for="signup-firstname" class="form-label text-default">İsim</label>
+                                <InputText id="signup-name" type="text" class="form-control form-control-lg" placeholder="İsim" @bind-Value="signUpRequest.Name" />
+                                <ValidationMessage For="@(() => signUpRequest.Name)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-lastname" class="form-label text-default">Soyisim</label>
+                                <InputText id="signup-surname" type="text" class="form-control form-control-lg" placeholder="Soyisim" @bind-Value="signUpRequest.Surname" />
+                                <ValidationMessage For="@(() => signUpRequest.Surname)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-mail" class="form-label text-default">E-Mail</label>
+                                <InputText id="signup-mail" type="email" class="form-control form-control-lg" placeholder="Email" @bind-Value="signUpRequest.Mail" />
+                                <ValidationMessage For="@(() => signUpRequest.Mail)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-password" class="form-label text-default">Password</label>
+                                <InputText id="password" type="password" class="form-control form-control-lg" placeholder="Şifre" @bind-Value="signUpRequest.Password" />
+                                <ValidationMessage For="@(() => signUpRequest.Password)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-confirmpassword" class="form-label text-default">Confirm Password</label>
+                                <InputText id="password2" type="password" class="form-control form-control-lg" placeholder="Şifre" @bind-Value="signUpRequest.Password" />
+                                <ValidationMessage For="@(() => signUpRequest.Password)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-phone" class="form-label text-default">Telefon</label>
+                                <InputText id="signup-phone" type="tel" class="form-control form-control-lg" placeholder="+90" @bind-Value="signUpRequest.Phone" />
+                                <ValidationMessage For="@(() => signUpRequest.Phone)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="signup-adress" class="form-label text-default">Adres</label>
+                                <InputTextArea id="signup-adress"  class="form-control form-control-lg" placeholder="Adres" @bind-Value="signUpRequest.Adress" />
+                                <ValidationMessage For="@(() => signUpRequest.Adress)" />
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
+                                        By creating a account you agree to our <a href="terms_conditions" class="text-success"><u>Terms &amp; Conditions</u></a> and <a class="text-success"><u>Privacy Policy</u></a>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 d-grid mt-2">
+                                <button class="btn btn-lg btn-primary">HESAP OLUŞTUR</button>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="fs-12 text-muted mt-3">Zaten bir hesabınız var mı?<a href="login" class="text-primary">Giriş Yap</a></p>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private SignUpRequest signUpRequest = new();
+    private SignUpValidator validator = new SignUpValidator();
+
+    private async Task LoginAsync()
+    {
+
+    }
+}
