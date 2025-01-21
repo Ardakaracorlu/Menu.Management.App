@@ -20,6 +20,5 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Pages\Helper\" />
-    <Folder Include="Services\Auth\" />
   </ItemGroup>
 </Project>
