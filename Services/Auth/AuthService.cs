@@ -17,7 +17,7 @@ namespace Menu.Management.App.Services.Auth
         public async Task SetLoginSessionAsync(LoginResponse response)
         {
             await _sessionStorage.SetAsync("authToken", response.AccessToken);
-            await _sessionStorage.SetAsync("tokenExpiration", 60);
+            await _sessionStorage.SetAsync("tokenExpiration", 1);
         }
 
         public async Task<string> GetTokenAsync()

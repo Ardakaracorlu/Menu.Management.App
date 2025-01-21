@@ -6,11 +6,15 @@
 @using System.Text.Json;
 @using System.ComponentModel.DataAnnotations
 @using Blazored.FluentValidation
+@using Menu.Management.App.Model.Response.Account
+@using Menu.Management.App.Services.Auth
+@using Newtonsoft.Json
 @layout CustomLayout
 @inject NavigationManager _NavigationManager
 @inject SweetAlertService _swal
 @inject ConfigManager _configManager;
 @inject HttpClientHelper _httpClientHelper
+@inject AuthService _authService
 
 
 <div class="container">
@@ -71,6 +75,11 @@
 
         var response = await _httpClientHelper.PostAsync(null, $"{_configManager.ApiSettings.Url}Account/Login", headers);
         if (response.IsSuccessStatusCode)
-            _NavigationManager.NavigateTo("/home");
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(content);
+            await _authService.SetLoginSessionAsync(loginResponse);
+        }
+        _NavigationManager.NavigateTo("/home");
     }
 }
