@@ -1,7 +1,13 @@
 ﻿@page "/sign-up"
 @using Blazored.FluentValidation
 @using Menu.Management.App.Model.Request.Account
+@using Menu.Management.App.Model.Response.Account
+@using Newtonsoft.Json
 @layout CustomLayout
+@inject ConfigManager _configManager;
+@inject HttpClientHelper _httpClientHelper
+@inject SweetAlertService _swal
+@inject NavigationManager _NavigationManager
 
 <div class="container-lg">
     <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
@@ -13,7 +19,7 @@
                 </a>
             </div>
             <div class="card custom-card">
-                <EditForm Model="@signUpRequest" OnValidSubmit="LoginAsync">
+                <EditForm Model="@signUpRequest" OnValidSubmit="SignUpService">
                     <FluentValidationValidator />
                     <div class="card-body p-5">
                         <p class="h5 fw-semibold mb-2 text-center">ÜYE OL</p>
@@ -41,8 +47,8 @@
                             </div>
                             <div class="col-xl-12">
                                 <label for="signup-confirmpassword" class="form-label text-default">Confirm Password</label>
-                                <InputText id="password2" type="password" class="form-control form-control-lg" placeholder="Şifre" @bind-Value="signUpRequest.Password" />
-                                <ValidationMessage For="@(() => signUpRequest.Password)" />
+                                <InputText id="password2" type="password" class="form-control form-control-lg" placeholder="Şifre" @bind-Value="signUpRequest.ConfirmPassword" />
+                                <ValidationMessage For="@(() => signUpRequest.ConfirmPassword)" />
                             </div>
                             <div class="col-xl-12">
                                 <label for="signup-phone" class="form-label text-default">Telefon</label>
@@ -78,8 +84,13 @@
     private SignUpRequest signUpRequest = new();
     private SignUpValidator validator = new SignUpValidator();
 
-    private async Task LoginAsync()
+    private async Task SignUpService()
     {
-
+        var response = await _httpClientHelper.PostAsync(signUpRequest, $"{_configManager.ApiSettings.Url}Account/SignUp");
+        if (response.IsSuccessStatusCode)
+        {
+            _NavigationManager.NavigateTo("/login");
+        }
+       
     }
 }

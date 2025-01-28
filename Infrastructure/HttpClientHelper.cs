@@ -1,5 +1,6 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using Menu.Management.App.Model.Response;
+using Menu.Management.App.Services.Auth;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using System.Net.Mime;
@@ -13,13 +14,15 @@ public class HttpClientHelper
     private readonly SweetAlertService _swal;
     private readonly NavigationManager _navigationManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly AuthService _authService;
 
-    public HttpClientHelper(HttpClient httpClient, SweetAlertService swal, NavigationManager navigationManager, IHttpContextAccessor httpContextAccessor)
+    public HttpClientHelper(HttpClient httpClient, SweetAlertService swal, NavigationManager navigationManager, IHttpContextAccessor httpContextAccessor, AuthService authService)
     {
         _httpClient = httpClient;
         _swal = swal;
         _navigationManager = navigationManager;
         _httpContextAccessor = httpContextAccessor;
+        _authService = authService;
     }
 
     private async Task HandleErrorAsync(HttpResponseMessage response)
@@ -147,10 +150,9 @@ public class HttpClientHelper
 
     private async Task AddAuthorizationHeader()
     {
-        var session = _httpContextAccessor.HttpContext?.Session;
-        if (session != null)
+        var token = await _authService.GetTokenAsync();
+        if (!string.IsNullOrEmpty(token))
         {
-            var token = session.GetString("authToken");
             if (!string.IsNullOrEmpty(token))
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
