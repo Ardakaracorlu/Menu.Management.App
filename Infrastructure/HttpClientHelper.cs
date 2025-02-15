@@ -138,7 +138,6 @@ public class HttpClientHelper
 
     private void AddHeaders(Dictionary<string, string>? headers)
     {
-        _httpClient.DefaultRequestHeaders.Clear();
         if (headers != null)
         {
             foreach (var header in headers)
