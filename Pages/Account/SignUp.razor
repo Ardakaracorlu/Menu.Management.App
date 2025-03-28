@@ -86,10 +86,12 @@
 
     private async Task SignUpService()
     {
-        var response = await _httpClientHelper.PostAsync(signUpRequest, $"{_configManager.ApiSettings.Url}Account/SignUp");
+        var response = await _httpClientHelper.PostAsync(signUpRequest, $"{_configManager.ApiSettings.Url}Account/SignUp"); // Todo Süreli Swall Çıkar sonra Logine Yönlendir
         if (response.IsSuccessStatusCode)
         {
             _NavigationManager.NavigateTo("/login");
+
+
         }
        
     }

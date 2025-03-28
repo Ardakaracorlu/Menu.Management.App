@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components;
 using Menu.Management.App.Model.Response.Account;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Menu.Management.App.Services.Auth
 {
@@ -19,6 +20,11 @@ namespace Menu.Management.App.Services.Auth
             await _sessionStorage.SetAsync("authToken", response.AccessToken);
             await _sessionStorage.SetAsync("tokenExpiration", 1);
         }
+        public async Task ClearSessionAsync()
+        {
+            await _sessionStorage.DeleteAsync("authToken");
+            await _sessionStorage.DeleteAsync("tokenExpiration");
+        }
 
         public async Task<string> GetTokenAsync()
         {
@@ -35,11 +41,30 @@ namespace Menu.Management.App.Services.Auth
 
         public async Task<bool> IsTokenValidAsync()
         {
-            var expirationResult = await _sessionStorage.GetAsync<DateTime>("tokenExpiration");
-
-            if (!expirationResult.Success || expirationResult.Value <= DateTime.UtcNow)
+            var token = await GetTokenAsync();
+            if (string.IsNullOrEmpty(token))
             {
-                await LogoutAsync();
+                await ClearSessionAsync();
+                return false;
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var expClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "exp");
+            if (expClaim == null)
+            {
+                await ClearSessionAsync();
+                return false;
+            }
+
+            // exp claim'i saniye cinsinden epoch time'dır
+            var expUnix = long.Parse(expClaim.Value);
+            var expDateTime = DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
+
+            if (expDateTime <= DateTime.UtcNow)
+            {
+                await ClearSessionAsync();
                 return false;
             }
 

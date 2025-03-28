@@ -50,6 +50,12 @@
                             <div class="col-xl-12 d-grid mt-2">
                                 <button class="btn btn-lg btn-primary" type="submit">Giriþ</button>
                             </div>
+                            <div class="col-xl-12 d-grid mt-2">
+                                <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
+                                    Henüz üye olmadýn mý?
+                                    <a href="sign-up" class="fw-semibold text-primary ms-1">Hemen kaydol</a>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </EditForm>
@@ -79,7 +85,8 @@
             var content = await response.Content.ReadAsStringAsync();
             var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(content);
             await _authService.SetLoginSessionAsync(loginResponse);
+            _NavigationManager.NavigateTo("/home");
         }
-        _NavigationManager.NavigateTo("/home");
+        
     }
 }

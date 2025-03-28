@@ -11,6 +11,7 @@
     <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.5.0" />
     <PackageReference Include="WMBlazorOverlayScrollbars" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.6" />

@@ -93,10 +93,16 @@
         {
             var content = await response.Content.ReadAsStringAsync();
             getStartedStatusResponse = JsonConvert.DeserializeObject<GetStartedStatusResponse>(content);
+            isLoading = false;
+            StateHasChanged();
         }
-        isLoading = false;
-        StateHasChanged();
+        else
+        {
+            _NavigationManager.NavigateTo("/home");
+        }
     }
+
+
 }
 
 <div class="container-fluid">

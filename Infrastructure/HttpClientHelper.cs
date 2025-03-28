@@ -98,8 +98,8 @@ public class HttpClientHelper
     {
         return await SendRequestAsync(async () =>
         {
-            await AddAuthorizationHeader();
             AddHeaders(headers);
+            await AddAuthorizationHeader();       
             return await _httpClient.GetAsync(url);
         });
     }
@@ -108,8 +108,8 @@ public class HttpClientHelper
     {
         return await SendRequestAsync(async () =>
         {
-            await AddAuthorizationHeader();
             AddHeaders(headers);
+            await AddAuthorizationHeader();       
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestModel), Encoding.UTF8, MediaTypeNames.Application.Json);
             return await _httpClient.PostAsync(url, requestModel != null ? requestContent : null);
         });
@@ -119,8 +119,8 @@ public class HttpClientHelper
     {
         return await SendRequestAsync(async () =>
         {
-            await AddAuthorizationHeader();
             AddHeaders(headers);
+            await AddAuthorizationHeader();        
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestModel), Encoding.UTF8, MediaTypeNames.Application.Json);
             return await _httpClient.PutAsync(url, requestContent);
         });
@@ -130,14 +130,16 @@ public class HttpClientHelper
     {
         return await SendRequestAsync(async () =>
         {
-            await AddAuthorizationHeader();
             AddHeaders(headers);
+            await AddAuthorizationHeader();        
             return await _httpClient.DeleteAsync(url);
         });
     }
 
     private void AddHeaders(Dictionary<string, string>? headers)
     {
+        _httpClient.DefaultRequestHeaders.Clear();
+
         if (headers != null)
         {
             foreach (var header in headers)

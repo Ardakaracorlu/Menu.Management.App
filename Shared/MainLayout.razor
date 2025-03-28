@@ -3,10 +3,14 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @inject IJSRuntime JSRuntime
 @using System.Text.Json
+@using Menu.Management.App.Services.Auth
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager // This line is used to generate 
 @inject StateService stateService
-
+@inject AuthService AuthService
 @inject SessionService _sessionService
+@inject SweetAlertService _swal
+@inject NavigationManager _navigationManager;
+
 
 <PageTitle>ynex</PageTitle>
 
@@ -47,6 +51,32 @@
     {
         if (firstRender)
         {
+            
+
+            var currentUrl = _navigationManager.Uri.ToLower();
+
+            // login ya da signup sayfalarında token kontrolü yapma
+            if (!currentUrl.Contains("/login") && !currentUrl.Contains("/sign-up"))
+            {
+                // 🚨 Token geçerliliğini kontrol et
+                var isValid = await AuthService.IsTokenValidAsync();
+
+                if (!isValid)
+                {
+                    await _swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Uyarı",
+                            Text = "Oturum süreniz sona erdi. Lütfen tekrar giriş yapınız.",
+                            Icon = SweetAlertIcon.Warning,
+                            Timer = 5000,
+                            ConfirmButtonText = "Tamam",
+                        });
+
+                    _navigationManager.NavigateTo("/login", forceLoad: true);
+                    return; // Alert sonrası yönlendirme yaptık, devam etme
+                }
+            }
+
             await stateService.retrieveFromLocalStorage();
             await JSRuntime.InvokeVoidAsync("interop.updateScrollVisibility", DotNetObjectReference.Create(this));
 
