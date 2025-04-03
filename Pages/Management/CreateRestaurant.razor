@@ -1,0 +1,123 @@
+﻿@page "/create-restaurant"
+@using Blazored.FluentValidation
+@using Menu.Management.App.Model.Request.Management
+@using Menu.Management.App.Model.Response
+@using Menu.Management.App.Model.Response.Common;
+@using Newtonsoft.Json
+@inject NavigationManager _NavigationManager
+@inject SweetAlertService _swal
+@inject ConfigManager _configManager;
+@inject HttpClientHelper _httpClientHelper
+
+<div class="container-lg">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+            <div class="my-5 d-flex justify-content-center">
+                <a href="home">
+                    <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+                    <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
+                </a>
+            </div>
+            <div class="card custom-card">
+                <EditForm Model="@request" OnValidSubmit="CreateRestaurantService">
+                    <FluentValidationValidator />
+                    <div class="card-body p-5">
+                        <p class="h5 fw-semibold mb-2 text-center">RESTORAN OLUŞTUR</p>
+                        <div class="row gy-3">
+                            <div class="mb-3">
+                                <label for="companySelect" class="form-label">Şirket Seç</label>
+                                <InputSelect id="companySelect" class="form-control" @bind-Value="request.CompanyId">
+                                    <option value="">-- Şirket Seçiniz --</option>
+                                    @foreach (var company in companyList)
+                                    {
+                                        <option value="@company.Id">@company.Name</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => request.CompanyId)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="restaurant-name" class="form-label text-default">Restoran Adı</label>
+                                <InputText id="restaurant-name" type="text" class="form-control form-control-lg" placeholder="İsim" @bind-Value="request.Name" />
+                                <ValidationMessage For="@(() => request.Name)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="restaurant-phone" class="form-label text-default">Telefon</label>
+                                <InputText id="restaurant-phone" type="tel" class="form-control form-control-lg" placeholder="+90" @bind-Value="request.Phone" />
+                                <ValidationMessage For="@(() => request.Phone)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="restaurant-mail" class="form-label text-default">E-Mail</label>
+                                <InputText id="restaurant-mail" type="email" class="form-control form-control-lg" placeholder="Email" @bind-Value="request.Mail" />
+                                <ValidationMessage For="@(() => request.Mail)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="restaurant-NumberOfTable" class="form-label text-default">Masa Sayısı</label>
+                                <InputNumber id="restaurant-NumberOfTable" class="form-control form-control-lg" placeholder="Masa Sayısı" @bind-Value="request.NumberOfTable" />
+                                <ValidationMessage For="@(() => request.NumberOfTable)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="restaurant-adress" class="form-label text-default">Adres</label>
+                                <InputTextArea id="restaurant-adress" class="form-control form-control-lg" placeholder="Adres" @bind-Value="request.Adress" />
+                                <ValidationMessage For="@(() => request.Adress)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="restaurant-Description" class="form-label text-default">Açıklama</label>
+                                <InputTextArea id="restaurant-Description" class="form-control form-control-lg" placeholder="Adres" @bind-Value="request.Description" />
+                                <ValidationMessage For="@(() => request.Description)" />
+                            </div>
+                            <div class="col-xl-12 d-grid mt-2">
+                                <button class="btn btn-lg btn-primary">Restoran Oluştur</button>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="_content/CurrieTechnologies.Razor.SweetAlert2/sweetAlert2.min.js"></script>
+
+@code {
+    private CreateRestaurantRequest request = new CreateRestaurantRequest();
+    private CreateRestaurantValidator validations = new CreateRestaurantValidator();
+    private List<GetCompanyListResponse> companyList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCompanyList();
+    }
+
+    private async Task GetCompanyList()
+    {
+        var response =  await _httpClientHelper.GetAsync($"{_configManager.ApiSettings.Url}Common/GetCompanyList");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadFromJsonAsync<List<GetCompanyListResponse>>();
+            if (content is not null)
+                companyList = content;
+        }
+    }
+
+    private async Task CreateRestaurantService()
+    {
+        var response = await _httpClientHelper.PostAsync(request, $"{_configManager.ApiSettings.Url}Management/CreateRestaurant");
+        if (response.IsSuccessStatusCode)
+        {
+            await _swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Başarılı",
+                    Text = "Restoranınız Başarıyla oluştu",
+                    Icon = SweetAlertIcon.Success,
+                    Timer = 2000,
+                    ShowConfirmButton = false
+                });
+
+            _NavigationManager.NavigateTo("/getstarted");
+
+        }
+    }
+
+}

@@ -89,8 +89,15 @@
         var response = await _httpClientHelper.PostAsync(signUpRequest, $"{_configManager.ApiSettings.Url}Account/SignUp"); // Todo Süreli Swall Çıkar sonra Logine Yönlendir
         if (response.IsSuccessStatusCode)
         {
+            await _swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Başarılı",
+                    Text = "Üyelik kaydınız Başarıyla oluştu",
+                    Icon = SweetAlertIcon.Success,
+                    Timer = 5000,
+                    ConfirmButtonText = "Tamam",
+                });
             _NavigationManager.NavigateTo("/login");
-
 
         }
        

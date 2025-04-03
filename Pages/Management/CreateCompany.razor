@@ -1,0 +1,93 @@
+﻿@page "/create-company"
+@using Blazored.FluentValidation
+@using Menu.Management.App.Model.Request.Management
+@using Menu.Management.App.Model.Response
+@using Newtonsoft.Json
+@inject NavigationManager _NavigationManager
+@inject SweetAlertService _swal
+@inject ConfigManager _configManager;
+@inject HttpClientHelper _httpClientHelper
+
+<div class="container-lg">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+            <div class="my-5 d-flex justify-content-center">
+                <a href="home">
+                    <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+                    <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
+                </a>
+            </div>
+            <div class="card custom-card">
+                <EditForm Model="@createCompanyRequest" OnValidSubmit="CreateCompanyService">
+                    <FluentValidationValidator />
+                    <div class="card-body p-5">
+                        <p class="h5 fw-semibold mb-2 text-center">ŞİRKET OLUŞTUR</p>
+                        <div class="row gy-3">
+                            <div class="col-xl-12">
+                                <label for="company-name" class="form-label text-default">Şirket Adı</label>
+                                <InputText id="company-name" type="text" class="form-control form-control-lg" placeholder="İsim" @bind-Value="createCompanyRequest.Name" />
+                                <ValidationMessage For="@(() => createCompanyRequest.Name)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="company-phone" class="form-label text-default">Telefon</label>
+                                <InputText id="company-phone" type="tel" class="form-control form-control-lg" placeholder="+90" @bind-Value="createCompanyRequest.Phone" />
+                                <ValidationMessage For="@(() => createCompanyRequest.Phone)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="company-mail" class="form-label text-default">E-Mail</label>
+                                <InputText id="company-mail" type="email" class="form-control form-control-lg" placeholder="Email" @bind-Value="createCompanyRequest.Mail" />
+                                <ValidationMessage For="@(() => createCompanyRequest.Mail)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="company-TaxIdentityNumber" class="form-label text-default">Vergi Numarası</label>
+                                <InputText id="company-TaxIdentityNumber" type="text" class="form-control form-control-lg" placeholder="İsim" @bind-Value="createCompanyRequest.TaxIdentityNumber" />
+                                <ValidationMessage For="@(() => createCompanyRequest.TaxIdentityNumber)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="company-adress" class="form-label text-default">Adres</label>
+                                <InputTextArea id="company-adress" class="form-control form-control-lg" placeholder="Adres" @bind-Value="createCompanyRequest.Adress" />
+                                <ValidationMessage For="@(() => createCompanyRequest.Adress)" />
+                            </div>
+                            <div class="col-xl-12">
+                                <label for="company-Description" class="form-label text-default">Açıklama</label>
+                                <InputTextArea id="company-Description" class="form-control form-control-lg" placeholder="Adres" @bind-Value="createCompanyRequest.Description" />
+                                <ValidationMessage For="@(() => createCompanyRequest.Description)" />
+                            </div>
+                            <div class="col-xl-12 d-grid mt-2">
+                                <button class="btn btn-lg btn-primary">Şirket Oluştur</button>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="_content/CurrieTechnologies.Razor.SweetAlert2/sweetAlert2.min.js"></script>
+
+@code {
+    private CreateCompanyRequest createCompanyRequest = new CreateCompanyRequest();
+    private CreateCompanyValidator CreateCompanyValidator = new CreateCompanyValidator();
+
+    private async Task CreateCompanyService()
+    {
+        var response = await _httpClientHelper.PostAsync(createCompanyRequest, $"{_configManager.ApiSettings.Url}Management/CreateCompany");
+        if (response.IsSuccessStatusCode)
+        {
+            await _swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Başarılı",
+                    Text = "Şirketiniz Başarıyla oluştu",
+                    Icon = SweetAlertIcon.Success,
+                    Timer = 2000,
+                    ShowConfirmButton = false
+                });
+
+            _NavigationManager.NavigateTo("/getstarted");
+
+        }
+    }
+
+}

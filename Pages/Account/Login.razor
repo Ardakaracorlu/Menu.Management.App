@@ -85,6 +85,14 @@
             var content = await response.Content.ReadAsStringAsync();
             var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(content);
             await _authService.SetLoginSessionAsync(loginResponse);
+            await _swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Giriþ Baþarýlý",
+                    Text = "Hoþ geldin!",
+                    Icon = SweetAlertIcon.Success,
+                    Timer = 2000,
+                    ShowConfirmButton = false
+                });
             _NavigationManager.NavigateTo("/home");
         }
         

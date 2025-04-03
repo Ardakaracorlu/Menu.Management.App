@@ -38,7 +38,7 @@ public class HttpClientHelper
                 Title = "Hata",
                 Text = baseErrorResponse?.Detail ?? "Bilinmeyen bir hata oluştu.",
                 Icon = SweetAlertIcon.Error,
-                Timer = 5000,
+                Timer = 8000,
                 ConfirmButtonText = "Tamam",
             });
 
